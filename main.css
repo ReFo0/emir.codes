@@ -14,9 +14,7 @@ body {
 }
 
 .hero {
-    padding-left: 18rem;
-    padding-right: 18rem;
-    padding-top: 1rem;
+    padding: 1rem 18rem;
 }
 
 .main-space {
@@ -67,10 +65,14 @@ body {
 
 .fp-cards {
     margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .fp-card {
     display: flex;
+    align-items: center;
     background: #27262a;
     border-radius: 10px;
     padding: 1rem;
@@ -138,7 +140,137 @@ body {
     display: none;
 }
 
-@media (max-width: 630px) {
+.icons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    position: absolute;
+    z-index: 2;
+    width: 100px;
+    color: white;
+    font-size: 12px;
+    background-color: #192733;
+    border-radius: 10px;
+    padding: 10px 15px 10px 15px;
+}
+
+.tooltip-text::before {
+    content: "";
+    position: absolute;
+    transform: rotate(45deg);
+    background-color: #192733;
+    padding: 5px;
+    z-index: 1;
+}
+
+.hover-text:hover .tooltip-text {
+    visibility: visible;
+}
+
+#top {
+    top: -40px;
+    left: -50%;
+}
+
+#top::before {
+    top: 80%;
+    left: 45%;
+}
+
+#bottom {
+    top: 25px;
+    left: -50%;
+}
+
+#bottom::before {
+    top: -5%;
+    left: 45%;
+}
+
+#left {
+    top: -8px;
+    right: 120%;
+}
+
+#left::before {
+    top: 35%;
+    left: 94%;
+}
+
+#right {
+    top: -8px;
+    left: 120%;
+}
+
+#right::before {
+    top: 35%;
+    left: -2%;
+}
+
+.hover-text {
+    position: relative;
+    display: inline-block;
+    margin: 40px;
+    font-family: Avenir;
+    text-align: center;
+}
+
+.fp-card-title {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 160px;
+    white-space: pre;
+}
+
+@media (max-width: 1000px) {
+    .fp-card {
+        display: flex;
+        align-items: start;
+    }
+
+    .icons {
+        display: flex;
+        gap: 0.8rem;
+    }
+
+    .main-space {
+        flex-direction: column-reverse;
+    }
+
+    .avatar > img {
+        width: 16rem;
+        height: 16rem;
+    }
+
+    .title {
+        margin-top: 2rem;
+        text-align: center;
+    }
+
+    .hero {
+        padding: 1rem;
+    }
+
+    .links {
+        display: flex;
+        justify-content: center;
+    }
+
+    .paragraph {
+        width: 100%;
+        text-align: center;
+    }
+
+    .fp-card-paragraph {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 900px) {
     #responsive-navbar {
         display: block;
         justify-content: center;
@@ -198,5 +330,9 @@ body {
     .links {
         display: flex;
         justify-content: center;
+    }
+
+    .fp-card-title {
+        width: 140px;
     }
 }
