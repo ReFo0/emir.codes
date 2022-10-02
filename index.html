@@ -1,23 +1,23 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>emir - developer</title>
+    <title>Emir - Developer</title>
 
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Basic metadata  -->
-    <meta name="title" content="emir dev"/>
-    <meta name="description" content="Hi I'm emir, this is my website."/>
-    <meta name="keywords" content="my portfolio, portfolio, emir, emir, kernel, c++ developer, reverse engineer, kernel level, kernel dev, kernel hacking, hack, "/>
+    <meta name="title" content="Emir dev"/>
+    <meta name="description" content="Hi I'm Emir, this is my website."/>
+    <meta name="keywords" content="my portfolio, portfolio, Emir, Emir, kernel, notorious developer, reverse engineer"/>
 
     <!-- og:* metadata  -->
     <meta property="og:url" content="https://emir.codes"/>
     <meta property="og:site_name" content="emir.codes"/>
-    <meta property="og:title" content="emirr | dev"/>
-    <meta property="og:description" content="Hi I'm emir, this is my website."/>
+    <meta property="og:title" content="Emir | dev"/>
+    <meta property="og:description" content="Hi I'm Emir, this is my website."/>
 
-    <link href="../dist/output.css" rel="stylesheet">
+    <link href="./dist/output.css" rel="stylesheet">
     <link href="main.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
 </head>
@@ -37,8 +37,8 @@
             <!-- RESPONSIVE NAVBAR -->
             <div id="responsive-navbar-button" class="rp-button">
                 <div>
-                    <i v-if="!navbar" @click="openNavbar()" class="fa-solid fa-bars text-2xl"></i>
-                    <i v-else @click="openNavbar()" class="fa-solid fa-times text-2xl"></i>
+                    <i v-if="!navbar" @click="toggleNavbar()" class="fa-solid fa-bars text-2xl"></i>
+                    <i v-else @click="toggleNavbar()" class="fa-solid fa-times text-2xl"></i>
                 </div>
             </div>
         </div>
@@ -59,11 +59,13 @@
     <main>
         <div class="main-space">
             <div>
-                <h1 class="title">Hi, I’m emir.</h1>
+                <h1 class="title">Hi, I’m Emir.</h1>
 
                 <p class="paragraph">
-                    I’m a developer
-                    I am interested in the kernel level.
+                    I’m a developer, co founder of <a target="http://dxgkr.nl"
+                                                              title="dxgkr nl web site link"
+                                                              href="http://dxgkr.nl" class="link">dxgkr.nl</a>
+                    I’m a developer I am interested in the kernel level.
                 </p>
 
                 <div id="links" class="links">
@@ -89,17 +91,28 @@
             <p class="fp-paragraph">A collection of some side projects that have shipped recently.</p>
 
             <div id="fp-cards" class="fp-cards">
-                <div class="fp-card">
-                    <div class="fp-card-image">
-                        <img src="https://avatars.githubusercontent.com/u/77904942?v=4"
-                             alt="soon.">
-                    </div>
+                <a v-for="(repo, index) in repos" :key="index" :href="repo.link" target="_blank"
+                   :title="repo.name + ' Repo'">
+                    <div class="fp-card">
+                        <div class="fp-card-image">
+                            <img :src="repo.image"
+                                 :alt="repo.description">
+                        </div>
 
-                    <div class="fp-card-content">
-                        <h1 class="text-xl font-semibold">soon.</h1>
-                        <p class="fp-card-paragraph">soon.</p>
+                        <div class="fp-card-content w-full">
+                            <div class="flex justify-between items-center w-full">
+                                <h1 class="fp-card-title">{{ repo.name }}</h1>
+
+                                <div class="icons">
+                                    <h1>{{ repo.star }} <i class="fa-solid fa-star"></i></h1>
+                                    <h1>{{ repo.forks }} <i class="fa-solid fa-code-fork"></i></h1>
+                                    <h1>{{ repo.issuesCount }} <i class="fa-solid fa-hashtag"></i></h1>
+                                </div>
+                            </div>
+                            <p class="fp-card-paragraph">{{ repo.description || "No Content"}}</p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </main>
@@ -114,7 +127,8 @@
         el: '#app',
         data: {
             navbar: false,
-            avatar: 'https://avatars.githubusercontent.com/u/77904942?v=4',
+            avatar: undefined,
+            repos: [],
             routers: [
                 {
                     name: 'Home',
@@ -126,18 +140,23 @@
                 },
                 {
                     name: 'Projects',
-                    path: 'http://github.com/ReFo0'
+                    path: 'http://github.com/refo0'
                 },
                 {
                     name: 'Contact',
-                    path: 'contact@emir.codes'
+                    path: 'mailto:contact@emir.codes'
                 }
             ],
             socialMedias: [
                 {
                     name: 'Github',
-                    link: 'http://github.com/ReFo0',
+                    link: 'http://github.com/refo0',
                     icon: 'fa-github',
+                },
+                {
+                    name: 'Twitter',
+                    link: 'http://twitter.com/',
+                    icon: 'fa-twitter',
                 },
                 {
                     name: 'Linkedin',
@@ -145,21 +164,40 @@
                     icon: 'fa-linkedin',
                 }
             ],
-            cards: [
-                {
-                    title: "Chakra UI",
-                    description: "A simple, modular and accessible component library that gives you all the building blocks you need to build your React applications.",
-                    image: "https://res.cloudinary.com/dxgkr/image/upload/v1593640000/chakra-ui/chakra-ui-logo.png",
-                }
-            ]
         },
         methods: {
             contact() {
-                window.location.href = 'contact@emir.codes'
+                window.location = 'mailto:contact@emir.codes'
             },
-            openNavbar() {
+            toggleNavbar() {
                 this.navbar = !this.navbar
+            },
+            setRepos() {
+                fetch('https://api.github.com/users/ref0/repos')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("sa")
+                        const repos = data.map(repo => {
+                            if (!repo.fork) {
+                                return {
+                                    name: repo.name,
+                                    description: repo.description,
+                                    image: repo.owner.avatar_url,
+                                    link: repo.html_url,
+                                    star: repo.stargazers_count,
+                                    forks: repo.forks_count,
+                                    issuesCount: repo.open_issues_count,
+                                }
+                            }
+                        }).filter(repo => repo !== undefined)
+
+                        this.repos = repos.sort((a,b) => b.star - a.star);
+                        this.avatar = data[0].owner.avatar_url
+                    })
             }
+        },
+        created() {
+            this.setRepos()
         }
     })
 </script>
